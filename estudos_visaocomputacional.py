@@ -20,16 +20,31 @@ img_cinza = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 #cv2_imshow(img_cinza)
 
 detector_facial = cv2.CascadeClassifier('/content/drive/MyDrive/Machine Learning/Visão Computacional Guia Completo/Cascades/haarcascade_frontalface_default.xml')
-dtc = detector_facial.detectMultiScale(img_cinza,
+detector_olhos = cv2.CascadeClassifier('/content/drive/MyDrive/Machine Learning/Visão Computacional Guia Completo/Cascades/haarcascade_eye.xml')
+
+
+
+dtc_Face = detector_facial.detectMultiScale(img_cinza,
                                        scaleFactor = 1.005,
                                        minNeighbors = 7,
                                        minSize = (123,123),
                                        maxSize = (200,200)
                                        )
 
+dtc_Olhos = detector_olhos.detectMultiScale(img_cinza,
+                                       scaleFactor = 1.03,
+                                       minNeighbors = 20,
+                                       minSize = (26,26),
+                                       maxSize = (51,51)
+                                       )
 
-for x,y,w,h in dtc:
-  print(f'{w} - {h}')
+for x,y,w,h in dtc_Face:
+  print(f'Face: {w} - {h}')
   if (w,h) != (125,125):
     cv2.rectangle(img2,(x,y),(x+w,y+h), (0,255,0),4)
+
+for x,y,w,h in dtc_Olhos:
+  print(f'Olhos: {w} - {h}')
+  cv2.rectangle(img2,(x,y),(x+w,y+h),(0,0,255),1)
+
 cv2_imshow(img2)
